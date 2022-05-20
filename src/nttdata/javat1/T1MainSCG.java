@@ -10,6 +10,7 @@ import nttdata.javat1.game.Player;
  * 
  * @author Samuel Calderón González
  *
+ * @version 1.1
  */
 public class T1MainSCG {
 	/*

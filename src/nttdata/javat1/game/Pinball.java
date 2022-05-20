@@ -42,6 +42,7 @@ public class Pinball {
 		case 2:
 			printLeaderBoard();
 			break;
+
 		case 3:
 			System.exit(0);
 			break;

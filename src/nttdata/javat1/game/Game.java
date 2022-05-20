@@ -11,12 +11,13 @@ import java.util.Scanner;
  */
 public class Game {
 	private ArrayList<Player> players;
-	
+
 	private int attemps;
 	private int bouncesN;
 	private int currentScore;
 	private int randomScore;
 	private int bestScore;
+	private Ball ball;
 
 	/**
 	 * Constructor de la clase Game
@@ -37,6 +38,7 @@ public class Game {
 		this.currentScore = 0;
 		this.players = players;
 		this.bestScore = bestScore;
+		this.ball = new Ball();
 
 		Bounces();
 		finalLogic();
@@ -55,8 +57,11 @@ public class Game {
 	 * Método vacío con un bucle de bounce() en función a la cantidad de rebotes.
 	 */
 	public void Bounces() {
+		System.out.println("You've got a " + this.ball.getType() + " ball!. x" + this.ball.getScoreMultiplier()
+				+ " score multiplier");
+		timeSleep(1500);
 		for (int i = 0; i < this.bouncesN; i++) {
-			randomTimeSleep();
+			timeSleep((int)(Math.random()*2500));
 			bounce();
 		}
 	}
@@ -109,8 +114,8 @@ public class Game {
 			scr = (int) (Math.random() * 50000);
 			break;
 		}
-		this.currentScore += scr;
-		System.out.println("+" + scr + " points!");
+		this.currentScore += (scr * this.ball.getScoreMultiplier());
+		System.out.println("+" + ((int)(scr  * this.ball.getScoreMultiplier())) + " points!");
 
 	}
 
@@ -141,13 +146,13 @@ public class Game {
 	}
 
 	/**
-	 * Método que introduce un tiempo de espera aleatorio entre 0-2500 milisegundos.
+	 * Método que introduce un tiempo de espera.
 	 * Utilizado para añadir realismo tanto a los rebotes de la pelota como a los
 	 * tiempos de carga.
 	 */
-	public void randomTimeSleep() {
+	public void timeSleep(int ms) {
 		try {
-			Thread.sleep((int) (Math.random() * 2500));
+			Thread.sleep((int) (Math.random() * ms));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -178,13 +183,15 @@ public class Game {
 	 */
 	public void finalLogic() {
 		setBestScore();
+		timeSleep(2500);
 		// Decrementa la variable "attemps" en el momento.
 		System.out.println("Your ball has fallen into a hole! Your score current score is " + this.currentScore
 				+ ".\nYour best score is " + this.bestScore + ". " + --this.attemps + " balls remaining.\n");
+		timeSleep(1000);
 		// Si quedan intentos, lanza otra bola.
 		if (this.attemps > 0) {
 			System.out.println("Your next ball is currently launching...\n");
-			randomTimeSleep();
+			timeSleep(1000);
 			// Crea nuevo juego con la variable attemps ya decrementada. Esto actua como una
 			// especie de recursividad.
 			new Game(this.attemps, this.bestScore, this.players);
@@ -195,7 +202,7 @@ public class Game {
 			this.players.add(
 					new Player(nameMenu(), this.bestScore >= this.currentScore ? this.bestScore : this.currentScore));
 			System.out.println("Going to the main menu...\n");
-			randomTimeSleep();
+			timeSleep(1500);
 			new Pinball(this.players);
 		}
 	}
